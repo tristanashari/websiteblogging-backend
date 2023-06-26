@@ -22,7 +22,9 @@ module.exports = {
         body("username")
             .notEmpty()
             .withMessage("Please fill in username"),
-        body("phoneNumber").notEmpty(),
+        body("phoneNumber")
+            .notEmpty()
+            .withMessage("Please fill in phone number"),
         body("password")
             .isLength({min: 6})
             .withMessage("Password must be at least 6 characters")
