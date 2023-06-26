@@ -62,7 +62,7 @@ module.exports = {
             console.log(error)
             res.status(500).send({
                 message: "server error",
-                error: error
+                error: error.message
             })
         }
     },
@@ -104,7 +104,7 @@ module.exports = {
         } catch(error) {
             res.status(500).send({
                 message: "server error",
-                error: error
+                error: error.message
             })
         }
         
@@ -137,7 +137,7 @@ module.exports = {
         } catch(error) {
             res.status(500).send({
                 message: "server error",
-                error: error
+                error: error.message
             })
         }
     },
@@ -177,7 +177,7 @@ module.exports = {
         } catch(error) {
             res.status(error).send({
                 message: "server error",
-                error: error
+                error: error.message
             })
         }
     },
@@ -207,7 +207,7 @@ module.exports = {
         } catch(error) {
             res.status(500).send({
                 message: "server error",
-                error: error
+                error: error.message
             })
         }
     }
