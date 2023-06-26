@@ -2,7 +2,31 @@ const db = require("../models")
 
 module.exports = {
     async getAllBlog(req,res) {
+        const pagination = {
+            catID: req.query.catID || undefined,
+            page: Number(req.query.page) || 1,
+            perPage: 8,
+            search: req.query.search || undefined,
+            sortBy: req.query.sortBy
+        }
+
         try {
+            const where = {}
+            if (pagination.search) {
+                where.title = {
+                    [db.Sequelize.Op.like]: `%${pagination.search}%`
+                }
+            }
+            if (pagination.catID) {
+                where.categoryID = {
+                    [db.Sequelize.Op.like]: pagination.catID
+                }
+            }
+            const order = []
+            for (const sort in pagination.sortBy) {
+                order.push([sort, pagination.sortBy[sort]])
+            }
+
             const results = await db.Blog.findAll({
               include: [
                 {
@@ -14,8 +38,26 @@ module.exports = {
                     attributes: ["categoryName"]
                 }
               ],
+              attributes: {
+                exclude: [
+                    "password"
+                ]
+              },
+              where,
+              limit: pagination.perPage,
+              offset: (pagination.page - 1) * pagination.perPage,
+              order
             });
-            res.send({ message: "success get all blog", data: results });
+
+            const totalBlog = await db.Blog.count({where})
+            res.send({ 
+                message: "success get all blog", 
+                pagination: {
+                    ...pagination,
+                    totalData: totalBlog,
+                },
+                data: results 
+            })
           } catch (errors) {
             res.status(500).send({
               message: "server error",
