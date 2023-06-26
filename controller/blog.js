@@ -81,5 +81,46 @@ module.exports = {
             errors,
           })
         }
+      },
+      async likeBlog(req, res) {
+        const blogID = req.params.id
+        const userID = req.user.id
+
+        try{
+          const isExist = await db.Blog.findOne({
+            where: { id: blogID },
+          });
+          if (!isExist) {
+            return res.status(404).send({
+              message: "blog not found",
+            });
+          }
+
+          const isLiked = await db.Like.findOne({
+            where: {
+              [db.Sequelize.Op.and] : [{ userID }, { blogID }]
+            }
+          })
+          if(isLiked) {
+            return res.status(400).send({
+              message: "Blog already liked"
+            })
+          }
+
+          const likeData = await db.Like.create({
+            userID,
+            blogID
+          })
+
+          res.status(200).send({
+            message: "Liked",
+            data: likeData
+          })
+        } catch(error) {
+          res.status(500).send({
+            message: "server error",
+            error: error.message
+          })
+        }
       }
 }

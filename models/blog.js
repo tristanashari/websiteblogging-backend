@@ -16,6 +16,9 @@ module.exports = (sequelize, DataTypes) => {
       }),
       Blog.belongsTo(models.Category, {
         foreignKey: "categoryID"
+      }),
+      Blog.hasMany(models.Like, {
+        foreignKey: "blogID"
       })
     }
   }
