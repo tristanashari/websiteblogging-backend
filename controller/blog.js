@@ -212,7 +212,7 @@ module.exports = {
 
           const totalBlog = await db.Blog.count({where})
           res.send({ 
-              message: "success get all blog", 
+              message: "My blogs", 
               pagination: {
                   ...pagination,
                   totalData: totalBlog,

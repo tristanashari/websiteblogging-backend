@@ -86,7 +86,7 @@ module.exports = {
 
             const isValid = await bcrypt.compare(password, user.password)
             if (!isValid) {
-                res.status(400).send({
+                return res.status(400).send({
                     message: "Login failed. Incorrect password"
                 })
             }
